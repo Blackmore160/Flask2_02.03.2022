@@ -19,7 +19,7 @@ class QuoteResource(Resource):
             quotes = author.quotes.all()
             return [quote.to_dict() for quote in quotes], 200
 
-        quote = QuoteModel.query.get(id)
+        quote = QuoteModel.query.get(quote_id)
         if quote is not None:
             return quote.to_dict(), 200
         return {"Error": "Quote not found"}, 404
@@ -30,7 +30,7 @@ class QuoteResource(Resource):
         quote_data = parser.parse_args()
         author = AuthorModel.query.get(author_id)
         if author:
-            quote = QuoteModel(author, quote_data["quote"])
+            quote = QuoteModel(author, quote_data["text"])
             db.session.add(quote)
             db.session.commit()
             return quote.to_dict(), 201
