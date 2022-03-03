@@ -32,7 +32,7 @@ class QuoteResource(Resource):
         quote_data = parser.parse_args()
         author = AuthorModel.query.get(author_id)
         if author:
-            quote = QuoteModel(author, quote_data["text"], quote_data["rate"])
+            quote = QuoteModel(author, **quote_data)
             db.session.add(quote)
             db.session.commit()
             return quote_schema.dump(quote), 201
@@ -43,10 +43,17 @@ class QuoteResource(Resource):
         parser.add_argument("text")
         parser.add_argument("rate")
         new_data = parser.parse_args()
-
         quote = QuoteModel.query.get(quote_id)
-        quote.text = new_data["text"]
-        quote.rate = new_data["rate"]
+        author = AuthorModel.query.get(author_id)
+        if quote is None:
+            quote = QuoteModel(author, **new_data)
+            db.session.add(quote)
+            db.session.commit()
+            return quote_schema.dump(quote), 201
+        if new_data["text"]:
+            quote.text = new_data["text"]
+        if new_data["rate"]:
+            quote.rate = new_data["rate"]
         db.session.commit()
         return quote_schema.dump(quote), 200
 
