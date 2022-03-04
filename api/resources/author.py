@@ -1,4 +1,4 @@
-from api import Resource, reqparse, db
+from api import Resource, reqparse, db, auth
 from api.models.author import AuthorModel
 from api.schemas.author import author_schema, authors_schema
 
@@ -16,7 +16,7 @@ class AuthorResource(Resource):
 
         return author_schema.dump(author), 200
 
-
+    @auth.login_required(role="admin")
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("name", required=True)

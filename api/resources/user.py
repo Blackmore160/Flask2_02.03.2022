@@ -13,11 +13,12 @@ class UserResource(Resource):
         users = UserModel.query.all()
         return users_schema.dump(users)
 
-    @auth.login_required
+    # @auth.login_required
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("username", required=True)
         parser.add_argument("password", required=True)
+        parser.add_argument("role")
         data = parser.parse_args()
         user = UserModel(**data)
         db.session.add(user)
