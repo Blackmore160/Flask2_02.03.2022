@@ -1,4 +1,4 @@
-from api import Resource, reqparse, db
+from api import Resource, reqparse, db, auth
 from api.models.user import UserModel
 from api.schemas.user import user_schema, users_schema
 
@@ -13,6 +13,7 @@ class UserResource(Resource):
         users = UserModel.query.all()
         return users_schema.dump(users)
 
+    @auth.login_required
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("username", required=True)

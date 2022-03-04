@@ -2,6 +2,7 @@ from api import api, app
 from api.resources.quote import QuoteResource
 from api.resources.author import AuthorResource
 from api.resources.user import UserResource
+from api.resources.token import TokenResource
 from config import Config
 
 api.add_resource(QuoteResource,
@@ -15,6 +16,7 @@ api.add_resource(AuthorResource,
 api.add_resource(UserResource,
                  '/users', # <-- GET, POST
                  '/users/<int:user_id>') # <-- PUT, DELETE, GET(ID)
+api.add_resource(TokenResource, '/auth/token')
 
 if __name__ == '__main__':
     app.run(debug=Config.DEBUG, port=Config.PORT)
